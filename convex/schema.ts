@@ -12,13 +12,15 @@ export default defineSchema({
         code: v.string(),
         status: gameStatus,
         bpm: v.number(),
-        revealAt: v.optional(v.number())
-    }),
-    players: defineTable({
-        gameId: v.number(),
-        userId: v.number(),
-        name: v.string(),
-        track: v.number(),
-        steps: v.array(v.number()),
+        revealAt: v.optional(v.number()),
+        playerIds: v.array(v.string())
     })
+    .index("by_code", ["code"]),
+    players: defineTable({
+        gameId: v.id("games"),
+        userId: v.string(),
+        name: v.string(),
+        steps: v.array(v.boolean()),
+        locked: v.boolean()
+    }).index("by_game_user", ["gameId", "userId"])
 })
